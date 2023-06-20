@@ -2,6 +2,7 @@ import express from "express";
 import db from "../db/conn.mjs";
 import { ObjectId } from "mongodb";
 import sanitize from "mongo-sanitize";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -17,7 +18,8 @@ router.post("/signin", async (req, res) => {
   }
   else
   {
-    res.send(results[0].username).status(200);
+    var token = jwt.sign({username: results[0].username}, process.env.secret);
+    res.send({token: token}).status(200);
   }
 });
 
